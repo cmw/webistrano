@@ -1,0 +1,35 @@
+<h2>Configuration Files</h2>
+
+<fieldset class="fieldset">
+  <legend> <%=h pluralize(ConfigurationFile.count, 'Configuration File')%> listed</legend>
+
+<% if @configuration_files.empty? %>
+  <br/>
+    No configuration files created yet.<br />
+    Configuration Files are templates to be generated for each deployment.
+  <br/>
+<% else %>
+  <table class="sortable">
+    <tr>
+      <th width="40%">Name</th>
+      <th width="60%">File Target</th>
+    </tr>
+    <% for configuration_file in @configuration_files %>
+      <tr class="<%= cycle :even, :odd, :name => 'configuration_files'  %>">
+        <td><%= link_to h(configuration_file.name), configuration_file_path(configuration_file) %></td>
+        <td><%=h configuration_file.file_target %></td>
+        <% if current_user.admin? %>
+          <td><%= link_to 'Edit', edit_configuration_file_path(configuration_file) %></td>
+          <td><%= link_to 'Delete', configuration_file_path(configuration_file), :confirm => 'Are you sure?', :method => :delete %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<% if current_user.admin? %>
+  <br />
+  <%= link_to 'New Configuration File', new_configuration_file_path, :class => 'arrow_link' %>
+<% end %>
+
+</fieldset>

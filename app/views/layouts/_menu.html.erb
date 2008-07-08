@@ -15,6 +15,11 @@
                                              :path => recipes_path } )%>
 
 <%= render(:partial => 'layouts/menu_box', :locals => {
+                                            :box_type => 'configuration_files', 
+                                            :status => controller_in_use_or(ConfigurationFilesController, :closed), 
+                                            :path => configuration_files_path } )%>
+
+<%= render(:partial => 'layouts/menu_box', :locals => {
                                              :box_type => 'users', 
                                              :status => controller_in_use_or(UsersController, :closed), 
                                              :path => users_path } )%>

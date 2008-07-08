@@ -7,3 +7,13 @@
   <b>Alert these emails on deploy</b> (separated by space)<br />
   <%= text_field 'stage', :alert_emails, :style =>'width:330px' %>
 </p>
+
+<p>
+  <b>Memory consumption limit</b><br />
+  <%= text_field 'stage', :memory_need %>
+</p>
+
+<p>
+  <b>Maximum instances per deployment</b><br />
+  <%= text_field 'stage', :instances %>
+</p>

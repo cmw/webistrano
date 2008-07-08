@@ -1,0 +1,13 @@
+<h2>Editing configuration file: <%= @configuration_file.name %></h2>
+
+<% form_for(@configuration_file, :url => configuration_file_path(@configuration_file), :html => { :method => :put }) do |f| %>
+
+  <%= render :partial => 'form' %>
+  
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', configuration_file_path(@configuration_file), :class => 'arrow_link' %>
+ 

@@ -10,7 +10,7 @@ class Stage < ActiveRecord::Base
   validates_length_of :name, :maximum => 250
   validates_presence_of :project, :name
   
-  attr_accessible :name, :alert_emails
+  attr_accessible :name, :alert_emails, :memory_need, :instances
 
   # fake attr (Hash) that hold info why deployment is not possible
   # (think model.errors lite)
@@ -122,6 +122,12 @@ class Stage < ActiveRecord::Base
     d.stage = self
     deployer = Webistrano::Deployer.new(d)
     deployer.list_tasks.collect { |t| {:name => t.fully_qualified_name, :description => t.description} }.delete_if{|t| t[:name] == 'shell' || t[:name] == 'invoke'}
+  end
+  
+  # returns true if there is enough memory on all hosts to deploy all assigned stage
+  def sufficient_memory?
+    return false if hosts.blank?
+    hosts.uniq.inject(true){|sufficient, host| (sufficient && host.sufficient_memory?) || break}
   end
   
   protected

@@ -1,0 +1,12 @@
+<h2>New Configuration File</h2>
+
+<% form_for(:configuration_file, :url => configuration_files_path) do |f| %>
+
+  <%= render(:partial => 'form')%>
+  
+  <p>
+    <%= submit_tag "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', configuration_files_path %>

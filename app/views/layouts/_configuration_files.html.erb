@@ -1,0 +1,25 @@
+<div id="configuration_files_open_content" style="<%=h show_if_opened(status) %>">
+  <% if ConfigurationFile.count > 0 %>
+    <% for configuration_file in ConfigurationFile.find(:all, :order => "name ASC") %>
+      <a href="<%= configuration_file_path(configuration_file) %>" class="menu_link <%=h active_link_class(configuration_file) %>">
+		    <div class="menu_link_title">
+		      <%=h configuration_file.name %>
+		    </div>
+	    </a>
+    <% end %>
+  <% else %>
+    <div class="menu_item">No configuration file created yet</div>
+    <a href="<%= new_configuration_file_path %>" class="menu_link  menu_link_create">
+  	  <div class="menu_link_title">
+  	    New configuration_file
+  	  </div>
+	  </a>
+  <% end %>
+</div>
+<div id="configuration_files_closed_content" style="<%=h show_if_closed(status) %>">
+  <a href="javascript:open_menu_box('configuration_files')" class="menu_link  menu_link_create">
+	  <div class="menu_link_title">
+	    <%=h pluralize(ConfigurationFile.count, 'configuration file')%>
+	  </div>
+  </a>
+</div>

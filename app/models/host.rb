@@ -6,7 +6,7 @@ class Host < ActiveRecord::Base
   validates_presence_of :name
   validates_length_of :name, :maximum => 250
   
-  attr_accessible :name
+  attr_accessible :name, :memory
   
   before_validation :strip_whitespace
   
@@ -28,6 +28,12 @@ class Host < ActiveRecord::Base
     else
       false
     end
+  end
+  
+  # returns true if there is enough memory on this host to deploy all assigned stages
+  def sufficient_memory?
+    return true if stages.blank?
+    stages.uniq.map{|stage| stage.memory_need * stage.instances}.sum <= memory
   end
   
 end

@@ -9,7 +9,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080613212046) do
+ActiveRecord::Schema.define(:version => 20080708164737) do
+
+  create_table "configuration_files", :force => true do |t|
+    t.string   "name"
+    t.string   "file_target"
+    t.text     "file_template"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "before_task"
+    t.string   "after_task"
+  end
+
+  create_table "configuration_files_roles", :id => false, :force => true do |t|
+    t.integer "configuration_file_id", :limit => 11, :null => false
+    t.integer "role_id",               :limit => 11, :null => false
+  end
 
   create_table "configuration_parameters", :force => true do |t|
     t.string   "name"
@@ -44,6 +59,7 @@ ActiveRecord::Schema.define(:version => 20080613212046) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "memory",     :limit => 11
   end
 
   create_table "project_configurations", :force => true do |t|
@@ -91,6 +107,8 @@ ActiveRecord::Schema.define(:version => 20080613212046) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "alert_emails"
+    t.integer  "memory_need",  :limit => 11
+    t.integer  "instances",    :limit => 11
   end
 
   create_table "users", :force => true do |t|

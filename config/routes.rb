@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+
   # The priority is based upon order of creation: first created -> highest priority.
   
   # Sample of regular route:
@@ -19,6 +20,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :hosts
   map.resources :recipes, :collection => {:preview => :get}
+  map.resources :configuration_files, :collection => {:preview => :get}
   map.resources :projects, :member => {:dashboard => :get} do |projects|
     projects.resources :project_configurations
     

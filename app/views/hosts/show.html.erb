@@ -17,6 +17,10 @@
 		  <%=h @host.name %>
 		</p>
 		<p>
+		  <b>Memory:</b>
+		  <%=h "#{@host.memory} MB" if @host.memory%>
+		</p>
+		<p>
 		  <b>#Stages:</b>
 		  <%=h @host.stages.uniq.size %>
 		</p>

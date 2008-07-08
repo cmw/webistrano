@@ -9,7 +9,8 @@
       <th width="25%">Host</th>
       <th width="25%">Role</th>
       <th width="24%">SSH Port</th>
-      <th width="25%">Attributes</th>
+      <th width="24%">Attributes</th>
+      <th width="1%">Memory OK</th>
       <th width="1%">Status</th>
     </tr>
   <% for role in @stage.roles %>
@@ -18,6 +19,7 @@
       <td><%=h role.name %></td>
       <td><%=h role.ssh_port || 'default' %></td>
       <td><%=h role.role_attribute_hash.inspect unless role.role_attribute_hash.blank?  %></td>
+      <td><%= image_tag image_path("peritor_theme/status_#{role.host.sufficient_memory? ? 'success' : 'failed'}_small.png") %></td>
       <td><%= role.status_in_html %></td>
       <td><%= link_to 'Edit', edit_project_stage_role_path(@project, @stage, role) %></td>
       <td><%= link_to 'Delete', project_stage_role_path(@project, @stage, role), :confirm => 'Are you sure?', :method => :delete %></td>

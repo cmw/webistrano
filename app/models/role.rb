@@ -1,6 +1,7 @@
 class Role < ActiveRecord::Base
   belongs_to :stage
   belongs_to :host
+  has_and_belongs_to_many :configuration_files
   has_and_belongs_to_many :deployments
   
   validates_presence_of :stage, :name, :host, :no_release, :primary, :no_symlink

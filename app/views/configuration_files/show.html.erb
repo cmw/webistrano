@@ -1,0 +1,52 @@
+<h2>Configuration File: <%=h @configuration_file.name %></h2>
+
+<div class="special_box configuration_file_box">
+</div>
+
+<div style="float: left; width:380px;">
+  <div class="box_top_left">
+    <div class="box_top_right">
+  	  <div class="box_top">
+	    </div>
+    </div>
+  </div>
+  <div class="box_body" style="min-height: 123px;">
+    <div>
+    <p>
+      <b>Name:</b>
+      <%=h @configuration_file.name %>
+    </p>
+    <p>
+      <b>File target:</b>
+      <%=h @configuration_file.file_target %>
+    </p>
+    <p>
+      <b>Task run before file publish:</b>
+      <%=h @configuration_file.before_task %>
+    </p>
+    <p>
+      <b>Task run after file publish:</b>
+      <%=h @configuration_file.after_task %>
+    </p>
+		<% if current_user.admin? %>
+  		<br />
+	  	<%= link_to 'Edit Configuration File', edit_configuration_file_path(@configuration_file), :class => 'arrow_link' %> |
+	  	<%= link_to 'Delete', configuration_file_path(@configuration_file), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link' %>
+	  <% end %>
+	</div>	
+  </div>
+  <div class="box_bottom_left">
+    <div class="box_bottom_right">
+      <div class="box_bottom">  
+  	  </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+<br />
+
+<fieldset class="fieldset">
+  <legend>Body</legend>
+  <%= render :partial => 'preview', :locals => {:configuration_file => @configuration_file} %>
+</fieldset>
