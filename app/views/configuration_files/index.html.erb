@@ -11,13 +11,15 @@
 <% else %>
   <table class="sortable">
     <tr>
-      <th width="40%">Name</th>
+      <th width="30%">Name</th>
       <th width="60%">File Target</th>
+      <th width="10%">Roles</th>
     </tr>
     <% for configuration_file in @configuration_files %>
       <tr class="<%= cycle :even, :odd, :name => 'configuration_files'  %>">
         <td><%= link_to h(configuration_file.name), configuration_file_path(configuration_file) %></td>
         <td><%=h configuration_file.file_target %></td>
+        <td><%=h configuration_file.roles %></td>
         <% if current_user.admin? %>
           <td><%= link_to 'Edit', edit_configuration_file_path(configuration_file) %></td>
           <td><%= link_to 'Delete', configuration_file_path(configuration_file), :confirm => 'Are you sure?', :method => :delete %></td>

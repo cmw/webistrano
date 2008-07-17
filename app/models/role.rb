@@ -132,4 +132,8 @@ class Role < ActiveRecord::Base
     end
   end
   
+  def get_binding
+    binding
+  end
+  
 end

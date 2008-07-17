@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080708164737) do
+ActiveRecord::Schema.define(:version => 20080716161559) do
 
   create_table "configuration_files", :force => true do |t|
     t.string   "name"
@@ -19,11 +19,7 @@ ActiveRecord::Schema.define(:version => 20080708164737) do
     t.datetime "updated_at"
     t.string   "before_task"
     t.string   "after_task"
-  end
-
-  create_table "configuration_files_roles", :id => false, :force => true do |t|
-    t.integer "configuration_file_id", :limit => 11, :null => false
-    t.integer "role_id",               :limit => 11, :null => false
+    t.string   "roles"
   end
 
   create_table "configuration_parameters", :force => true do |t|
