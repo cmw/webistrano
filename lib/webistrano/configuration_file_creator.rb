@@ -42,19 +42,21 @@ module Webistrano
     end
   end
   
-  Webistrano::Template::Base::TASKS += <<-'EOS'
-    namespace :deploy do
-      desc "Deploying the config files and running the before and after tasks."
-      task :configuration_files do
-        cfc = ConfigurationFileCreator.new(deployment)
-        cfc.before_tasks.each do |task|
-          eval(task)
-        end
-        cfc.deploy_files
-        cfc.after_tasks.each do |task|
-          eval(task)
+  module ConfigurationFile
+    TASKS = <<-'EOS'
+      namespace :deploy do
+        desc "Deploying the config files and running the before and after tasks."
+        task :configuration_files do
+          cfc = ConfigurationFileCreator.new(deployment)
+          cfc.before_tasks.each do |task|
+            eval(task)
+          end
+          cfc.deploy_files
+          cfc.after_tasks.each do |task|
+            eval(task)
+          end
         end
       end
-    end
-  EOS
+    EOS
+  end
 end
