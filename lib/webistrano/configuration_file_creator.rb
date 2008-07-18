@@ -2,8 +2,9 @@ module Webistrano
   class ConfigurationFileCreator
     attr_accessor :before_tasks, :after_tasks, :stage, :files
     
-    def initialize(deployment)
-      @stage = deployment.stage
+    def initialize(stage)
+      @logger = RAILS_DEFAULT_LOGGER
+      @stage = stage
       @files = {}
       @before_tasks, @after_tasks = [], []
       configure
@@ -11,17 +12,22 @@ module Webistrano
 
     def deploy_files
       @files.each do |source, target|
-        %x(scp #{source} #{@stage.configuration_parameters.find_by_name('user')}@#{target})
+        %x(scp #{source} #{@stage.project.configuration_parameters.find_by_name('user').value}@#{target})
       end
     end
     
   private
     def configure
+      FileUtils.rm_rf "#{RAILS_ROOT}/tmp/files"
       @stage.roles.each do |role|
-        ConfigurationFile.find(:all, :conditions => {:roles => "%#{role}%"}).each do |config_file|
-          filename = eval(%{"#{config_file.file_target}"})
-          current_file = %x(ssh deploy@#{role.server.ip} cat #{filename})
-          rendered_template = config_file.render_content(role.get_binding)
+        ::ConfigurationFile.find(:all, :conditions => ["roles like ?", "%#{role.name}%"]).each do |config_file|
+          role.stage.project.configuration_parameters.each do |param|
+            (class << role; self; end).send :attr_accessor, param.name.to_sym
+            role.instance_variable_set(:"@#{param.name}", param.value)
+          end
+          filename = eval(%{"#{config_file.file_target}"}, role.get_binding)
+          current_file = %x(ssh deploy@#{role.host.name} cat #{filename})
+          rendered_template = config_file.rendered_content(role)
           unless current_file == rendered_template
             tmpfile = "#{RAILS_ROOT}/tmp/files/#{File.dirname(filename)}"
             FileUtils.mkdir_p tmpfile
@@ -29,7 +35,7 @@ module Webistrano
             File.open(tmpfile, 'w') do |f|
               f.puts rendered_template
             end
-            @files[tmpfile] = %(#{role.server.ip}:#{filename})
+            @files[tmpfile] = %(#{role.host.name}:#{filename})
             @after_tasks << config_file.after_task if config_file.after_task
             @before_tasks << config_file.before_task if config_file.before_task
           end
@@ -42,12 +48,13 @@ module Webistrano
     end
   end
   
-  module ConfigurationFile
+  module ConfigurationFileDeployment
     TASKS = <<-'EOS'
       namespace :deploy do
         desc "Deploying the config files and running the before and after tasks."
         task :configuration_files do
-          cfc = ConfigurationFileCreator.new(deployment)
+          stage = Project.find_by_name(fetch(:webistrano_project, "")).stages.find_by_name(fetch(:webistrano_stage, ""))
+          cfc = Webistrano::ConfigurationFileCreator.new(stage)
           cfc.before_tasks.each do |task|
             eval(task)
           end

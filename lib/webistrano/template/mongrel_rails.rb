@@ -3,7 +3,8 @@ module Webistrano
     module MongrelRails
       
       CONFIG = Webistrano::Template::Rails::CONFIG.dup.merge({
-        :mongrel_config => 'PATH to mongrel_cluster.yml, you need to create it yourself' 
+        :mongrel_config => 'PATH to mongrel_cluster.yml, you need to create it yourself',
+        :base_port => 'The port of the first Mongrel to listen on (every additional Mongrel will take the next free port)'
       }).freeze
       
       DESC = <<-'EOS'
